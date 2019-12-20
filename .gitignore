@@ -1,0 +1,15 @@
+.vs/
+.vscode/
+__pycache__/
+/test*
+test.py
+/logs
+/uploads
+*.jpg
+*.jpeg
+*.png
+*.bmp
+*.gif
+*.h5
+*.txt
+*.json
