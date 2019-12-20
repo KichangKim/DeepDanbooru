@@ -3,10 +3,10 @@
 
 ## Requirements
 DeepDanbooru is written by Python 3. Following packages are need to be installed.
-- Tensorflow 2.0 (tf-nightly-gpu-2.0-preview 2.0.0.dev20190504), other versions may not work.
-- click
-- scikit-image
-- numpy
+- tensorflow==2.1.0rc1
+- Click==7.0
+- scikit-image==0.15.0
+- numpy==1.16.2+mkl
 
 ## Usage
 1. Prepare dataset. If you don't have, you can use [DanbooruDownloader](https://github.com/KichangKim/DanbooruDownloader) for download the dataset of [Danbooru](https://danbooru.donmai.us/). If you want to make your own dataset, see [Dataset Structure](#dataset-structure) section.
