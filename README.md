@@ -8,6 +8,11 @@ DeepDanbooru is written by Python 3.6. Following packages are need to be install
 - scikit-image==0.15.0
 - numpy==1.16.2+mkl
 
+Or just use `requirements.txt`.
+```
+> pip install -r requirements.txt
+```
+
 ## Usage
 1. Prepare dataset. If you don't have, you can use [DanbooruDownloader](https://github.com/KichangKim/DanbooruDownloader) for download the dataset of [Danbooru](https://danbooru.donmai.us/). If you want to make your own dataset, see [Dataset Structure](#dataset-structure) section.
 2. Create training project folder.
