@@ -35,7 +35,7 @@ def to_onehot(length, index):
 
 
 def grad_cam(project_path, target_path, output_path, threshold):
-    os.environ['CUDA_VISIBLE_DEVICES'] = '-1'
+    # os.environ['CUDA_VISIBLE_DEVICES'] = '-1'
 
     if not os.path.exists(target_path):
         raise Exception(f'Target path {target_path} is not exists.')
