@@ -43,6 +43,8 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument("image_path", help="Image file path.", type=str)
     parser.add_argument("--cpu", help="Use CPU.", action="store_true")
+    parser.add_argument("--model", help="Path to model file.", default="model.h5")
+    parser.add_argument("--tags", help="Path to tags file.", default="tags.txt")
     parser.add_argument(
         "--threshold", help="Score threshold.", type=float, default=0.5)
 
@@ -55,7 +57,7 @@ if __name__ == '__main__':
         raise Exception(f'Target path {args.image_path} is not exists.')
 
     print('Loading model ...')
-    model = tf.keras.models.load_model('model.h5')
+    model = tf.keras.models.load_model(args.model)
 
     print('Loading image ...')
     image = prepare_image(args.image_path)
@@ -64,7 +66,7 @@ if __name__ == '__main__':
         (1, image_shape[0], image_shape[1], image_shape[2]))
 
     print('Loading tags ...')
-    with open('tags.txt', 'r') as stream:
+    with open(args.tags, 'r') as stream:
         tags = [tag for tag in (tag.strip() for tag in stream) if tag]
 
     print('Evaluating ...')
