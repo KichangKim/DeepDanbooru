@@ -4,6 +4,7 @@ python:
 # command to install dependencies
 install:
   - pip install -e .[test]
+  - pip install tensorflow
 # command to run tests
 script:
   - pytest
