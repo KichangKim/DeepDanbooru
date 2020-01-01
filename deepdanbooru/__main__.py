@@ -5,7 +5,10 @@ import click
 import deepdanbooru as dd
 
 
-@click.version_option(prog_name='DeepDanbooru', version='1.0.0')
+__version__ = '1.0.0'
+
+
+@click.version_option(prog_name='DeepDanbooru', version=__version__)
 @click.group()
 def main():
     pass
