@@ -22,12 +22,7 @@ def get_file_paths_in_directory(path, patterns):
     return [str(file_path) for pattern in patterns for file_path in Path(path).rglob(pattern)]
 
 
-def get_image_file_paths_recursive(folder_path):
-    patterns = [
-        '*.[Pp][Nn][Gg]',
-        '*.[Jj][Pp][Gg]',
-        '*.[Jj][Pp][Ee][Gg]',
-        '*.[Gg][Ii][Ff]'
-    ]
+def get_image_file_paths_recursive(folder_path, patterns_string):
+    patterns = patterns_string.split(',')
 
     return get_file_paths_in_directory(folder_path, patterns)

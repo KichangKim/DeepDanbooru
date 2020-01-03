@@ -5,7 +5,7 @@ import tensorflow as tf
 import deepdanbooru as dd
 
 
-def evaluate_image(image_path, model, tags, threshold):
+def evaluate_image(image_path: str, model, tags: list, threshold):
     width = model.input_shape[2]
     height = model.input_shape[1]
 
@@ -27,7 +27,7 @@ def evaluate_image(image_path, model, tags, threshold):
             yield tag, result_dict[tag]
 
 
-def evaluate(target_paths, project_path, model_path, tags_path, threshold, allow_gpu, compile_model, verbose):
+def evaluate(target_paths, project_path, model_path, tags_path, threshold, allow_gpu, compile_model, allow_folder, folder_filters, verbose):
     if not allow_gpu:
         os.environ['CUDA_VISIBLE_DEVICES'] = '-1'
 
@@ -40,10 +40,10 @@ def evaluate(target_paths, project_path, model_path, tags_path, threshold, allow
     target_image_paths = []
 
     for target_path in target_paths:
-        if os.path.isfile(target_path):
-            target_image_paths.append(target_path)
+        if allow_folder and not os.path.isfile(target_path):
+            target_image_paths.extend(dd.io.get_image_file_paths_recursive(target_path, folder_filters))
         else:
-            target_image_paths.extend(dd.io.get_image_file_paths_recursive(target_path))
+            target_image_paths.append(target_path)
 
     target_image_paths = dd.extra.natural_sorted(target_image_paths)
 

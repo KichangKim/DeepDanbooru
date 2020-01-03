@@ -68,18 +68,20 @@ def grad_cam(project_path, target_path, output_path, threshold):
     dd.commands.grad_cam(project_path, target_path, output_path, threshold)
 
 
-@main.command('evaluate', help='Evaluate model by estimating image tag. TARGET_PATHS can be image file or folder contains multiple image files.')
+@main.command('evaluate', help='Evaluate model by estimating image tag.')
 @click.argument('target_paths', nargs=-1, type=click.Path(exists=True, resolve_path=True, file_okay=True, dir_okay=True))
 @click.option('--project-path', type=click.Path(exists=True, resolve_path=True, file_okay=False, dir_okay=True),
               help='Project path. If you want to use specific model and tags, use --model-path and --tags-path options.')
 @click.option('--model-path', type=click.Path(exists=True, resolve_path=True, file_okay=True, dir_okay=False))
 @click.option('--tags-path', type=click.Path(exists=True, resolve_path=True, file_okay=True, dir_okay=False))
 @click.option('--threshold', default=0.5)
-@click.option('--allow-gpu', default=False)
+@click.option('--allow-gpu', default=False, is_flag=True)
 @click.option('--compile/--no-compile', 'compile_model', default=False)
-@click.option('--verbose', default=False)
-def evaluate(target_paths, project_path, model_path, tags_path, threshold, allow_gpu, compile_model, verbose):
-    dd.commands.evaluate(target_paths, project_path, model_path, tags_path, threshold, allow_gpu, compile_model, verbose)
+@click.option('--allow-folder', default=False, is_flag=True, help='If this option is enabled, TARGET_PATHS can be folder path and all images (using --folder-filters) in that folder is estimated recursively. If there are file and folder which has same name, the file is skipped and only folder is used.')
+@click.option('--folder-filters', default='*.[Pp][Nn][Gg],*.[Jj][Pp][Gg],*.[Jj][Pp][Ee][Gg],*.[Gg][Ii][Ff]', help='Glob pattern for searching image files in folder. You can specify multiple patterns by separating comma. This is used when --allow-folder is enabled. Default:*.[Pp][Nn][Gg],*.[Jj][Pp][Gg],*.[Jj][Pp][Ee][Gg],*.[Gg][Ii][Ff]')
+@click.option('--verbose', default=False, is_flag=True)
+def evaluate(target_paths, project_path, model_path, tags_path, threshold, allow_gpu, compile_model, allow_folder, folder_filters, verbose):
+    dd.commands.evaluate(target_paths, project_path, model_path, tags_path, threshold, allow_gpu, compile_model, allow_folder, folder_filters, verbose)
 
 
 if __name__ == '__main__':
