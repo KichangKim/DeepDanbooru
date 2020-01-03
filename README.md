@@ -51,20 +51,7 @@ To install it with tensorflow, add `tensorflow` extra package.
 ```
 7. Enjoy it.
 ```
-> deepdanbooru evaluate [image_file_path or folder] --project-path [your_project_folder] 
-```
-
-8. Estimate image tags.
-```
-> deepdanbooru evaluate-images [IMAGE_PATH]...
-Loading model ...
-Loading tags ...
-Tags of IMAGE_PATH:
-Loading image ...
-Evaluating ...
-(0.999) 4girls
-...
-(0.995) character:inazuma_(kantai_collection)
+> deepdanbooru evaluate [image_file_path or folder]... --project-path [your_project_folder] 
 ```
 
 ## Dataset Structure
