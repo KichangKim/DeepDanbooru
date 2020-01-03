@@ -53,6 +53,19 @@ To install it with tensorflow, add `tensorflow` extra package.
 > deepdanbooru evaluate-project [your_project_folder] [image_file_path]
 ```
 
+8. Estimate image tags.
+```
+> deepdanbooru evaluate-images [IMAGE_PATH]...
+Loading model ...
+Loading tags ...
+Tags of IMAGE_PATH:
+Loading image ...
+Evaluating ...
+(0.999) 4girls
+...
+(0.995) character:inazuma_(kantai_collection)
+```
+
 ## Dataset Structure
 DeepDanbooru uses following folder structure for input dataset. SQLite file can be any name, but must be located in same folder to `images` folder.
 ```
