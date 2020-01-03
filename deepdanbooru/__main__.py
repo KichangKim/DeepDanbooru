@@ -82,8 +82,11 @@ def grad_cam(project_path, target_path, output_path, threshold):
     '--tags_path', default='tags.txt', show_default=True,
     type=click.Path(exists=True, resolve_path=True, file_okay=True, dir_okay=False),
     help="Tags file path.")
-def evaluate_images(image_path, threshold, cpu, model_path, tags_path):
-    redistribution.evaluate_images(image_path, model_path, tags_path, cpu, threshold)
+@click.option(
+    '--compile/--no-compile', 'compile_', default=None,
+    help='Compile/don\'t compile when loading model.')
+def evaluate_images(image_path, threshold, cpu, model_path, tags_path, compile_):
+    redistribution.evaluate_images(image_path, model_path, tags_path, cpu, threshold, compile_)
 
 
 if __name__ == '__main__':

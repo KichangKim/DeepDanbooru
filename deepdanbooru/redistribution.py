@@ -1,11 +1,10 @@
 import argparse
 import os
-from typing import Any, Iterator, List, Tuple
+from typing import Any, Iterator, List, Optional, Tuple
 
 import numpy as np
 import skimage.transform
 import tensorflow as tf
-
 
 THRESHOLD = 0.5
 
@@ -67,12 +66,15 @@ def evaluate_image(
 
 def evaluate_images(
         image_paths: List[str], model_path: str, tags_path: str, cpu: bool,
-        threshold: float = THRESHOLD):
+        threshold: float = THRESHOLD, compile_: Optional[bool] = None):
     if cpu:
         os.environ['CUDA_VISIBLE_DEVICES'] = '-1'
 
     print('Loading model ...')
-    model = tf.keras.models.load_model(model_path)
+    if compile_ is None:
+        model = tf.keras.models.load_model(model_path)
+    else:
+        model = tf.keras.models.load_model(model_path, compile=compile_)
 
     print('Loading tags ...')
     with open(tags_path, 'r') as stream:
