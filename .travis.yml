@@ -1,0 +1,12 @@
+language: python
+python:
+  - "3.6"
+# command to install dependencies
+install:
+  - pip install -e .[test]
+  - pip install tensorflow
+# command to run tests
+script:
+  - pytest
+  - flake8
+  - mypy .

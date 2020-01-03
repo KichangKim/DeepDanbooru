@@ -4,8 +4,12 @@ import click
 
 import deepdanbooru as dd
 
+from . import redistribution
 
-@click.version_option(prog_name='DeepDanbooru', version='1.0.0')
+__version__ = '1.0.0'
+
+
+@click.version_option(prog_name='DeepDanbooru', version=__version__)
 @click.group()
 def main():
     pass
@@ -61,6 +65,28 @@ def evaluate_project(project_path, target_path, threshold):
 @click.option('--threshold', help='Threshold for tag estimation.', default=0.5)
 def grad_cam(project_path, target_path, output_path, threshold):
     dd.commands.grad_cam(project_path, target_path, output_path, threshold)
+
+
+@main.command('evaluate-images', help='Evaluate model by estimating image tag.')
+@click.argument(
+    'image_path', nargs=-1,
+    type=click.Path(exists=True, resolve_path=True, file_okay=True, dir_okay=False)
+)
+@click.option('--threshold', help='Threshold for tag estimation.', default=redistribution.THRESHOLD)
+@click.option('--cpu', default=False, is_flag=True, help="Use CPU")
+@click.option(
+    '--model_path', default='model.h5', show_default=True,
+    type=click.Path(exists=True, resolve_path=True, file_okay=True, dir_okay=False),
+    help="Model path.")
+@click.option(
+    '--tags_path', default='tags.txt', show_default=True,
+    type=click.Path(exists=True, resolve_path=True, file_okay=True, dir_okay=False),
+    help="Tags file path.")
+@click.option(
+    '--compile/--no-compile', 'compile_', default=None,
+    help='Compile/don\'t compile when loading model.')
+def evaluate_images(image_path, threshold, cpu, model_path, tags_path, compile_):
+    redistribution.evaluate_images(image_path, model_path, tags_path, cpu, threshold, compile_)
 
 
 if __name__ == '__main__':

@@ -17,28 +17,53 @@ Or just use `requirements.txt`.
 > pip install -r requirements.txt
 ```
 
+alternatively you can install it with pip. Note that by default, tensorflow is not included.
+
+To install it with tensorflow, add `tensorflow` extra package.
+
+```
+> # default installation
+> pip install .
+> # with tensorflow package
+> pip install .[tensorflow]
+```
+
+
 ## Usage
 1. Prepare dataset. If you don't have, you can use [DanbooruDownloader](https://github.com/KichangKim/DanbooruDownloader) for download the dataset of [Danbooru](https://danbooru.donmai.us/). If you want to make your own dataset, see [Dataset Structure](#dataset-structure) section.
 2. Create training project folder.
 ```
-> python program.py create-project [your_project_folder]
+> deepdanbooru create-project [your_project_folder]
 ```
 3. Prepare tag list. If you want to use latest tags, use following command. It downloads tag from Danbooru server.
 ```
-> python program.py download-tags [your_project_folder]
+> deepdanbooru download-tags [your_project_folder]
 ```
 4. (Option) Filtering dataset. If you want to train with optional tags (rating and score), you should convert it as system tags.
 ```
-> python program.py make-training-database [your_dataset_sqlite_path] [your_filtered_sqlite_path]
+> deepdanbooru make-training-database [your_dataset_sqlite_path] [your_filtered_sqlite_path]
 ```
 5. Modify `project.json` in the project folder. You should change `database_path` setting to your actual sqlite file path.
 6. Start training.
 ```
-> python program.py train-project [your_project_folder]
+> deepdanbooru train-project [your_project_folder]
 ```
 7. Enjoy it.
 ```
-> python program.py evaluate-project [your_project_folder] [image_file_path]
+> deepdanbooru evaluate-project [your_project_folder] [image_file_path]
+```
+
+8. Estimate image tags.
+```
+> deepdanbooru evaluate-images [IMAGE_PATH]...
+Loading model ...
+Loading tags ...
+Tags of IMAGE_PATH:
+Loading image ...
+Evaluating ...
+(0.999) 4girls
+...
+(0.995) character:inazuma_(kantai_collection)
 ```
 
 ## Dataset Structure
