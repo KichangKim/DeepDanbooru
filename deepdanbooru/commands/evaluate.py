@@ -5,6 +5,28 @@ import tensorflow as tf
 import deepdanbooru as dd
 
 
+def evaluate_image(image_path, model, tags, threshold):
+    width = model.input_shape[2]
+    height = model.input_shape[1]
+
+    image = dd.data.load_image_for_evaluate(
+        image_path, width=width, height=height)
+
+    image_shape = image.shape
+    image = image.reshape(
+        (1, image_shape[0], image_shape[1], image_shape[2]))
+    y = model.predict(image)[0]
+
+    result_dict = {}
+
+    for i, tag in enumerate(tags):
+        result_dict[tag] = y[i]
+
+    for tag in tags:
+        if result_dict[tag] >= threshold:
+            yield tag, result_dict[tag]
+
+
 def evaluate(target_paths, project_path, model_path, tags_path, threshold, allow_gpu, compile_model, verbose):
     if not allow_gpu:
         os.environ['CUDA_VISIBLE_DEVICES'] = '-1'
@@ -43,26 +65,9 @@ def evaluate(target_paths, project_path, model_path, tags_path, threshold, allow
             print(f'Loading tags from project {project_path} ...')
         tags = dd.project.load_tags_from_project(project_path)
 
-    width = model.input_shape[2]
-    height = model.input_shape[1]
-
     for image_path in target_image_paths:
-        image = dd.data.load_image_for_evaluate(
-            image_path, width=width, height=height)
-
-        image_shape = image.shape
-        image = image.reshape(
-            (1, image_shape[0], image_shape[1], image_shape[2]))
-        y = model.predict(image)[0]
-
-        result_dict = {}
-
-        for i, tag in enumerate(tags):
-            result_dict[tag] = y[i]
-
         print(f'Tags of {image_path}:')
-        for tag in tags:
-            if result_dict[tag] >= threshold:
-                print(f'({result_dict[tag]:05.3f}) {tag}')
+        for tag, score in evaluate_image(image_path, model, tags, threshold):
+            print(f'({score:05.3f}) {tag}')
 
         print()
