@@ -64,7 +64,7 @@ def train_project(project_path):
         raise Exception(f'Not supported model : {model_type}')
 
     print('Loading tags ... ')
-    tags = dd.data.load_tags(project_path)
+    tags = dd.project.load_tags_from_project(project_path)
     output_dim = len(tags)
 
     print(f'Creating model ({model_type}) ... ')

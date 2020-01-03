@@ -24,10 +24,27 @@ DEFAULT_PROJECT_CONTEXT = {
 def load_project(project_path):
     project_context_path = os.path.join(project_path, 'project.json')
     project_context = dd.io.deserialize_from_json(project_context_path)
-    tags = dd.data.load_tags(project_path)
+    tags = dd.data.load_tags_from_project(project_path)
 
     model_type = project_context['model']
     model_path = os.path.join(project_path, f'model-{model_type}.h5')
     model = tf.keras.models.load_model(model_path)
 
     return project_context, model, tags
+
+
+def load_model_from_project(project_path, compile_model=True):
+    project_context_path = os.path.join(project_path, 'project.json')
+    project_context = dd.io.deserialize_from_json(project_context_path)
+
+    model_type = project_context['model']
+    model_path = os.path.join(project_path, f'model-{model_type}.h5')
+    model = tf.keras.models.load_model(model_path, compile=compile_model)
+
+    return model
+
+
+def load_tags_from_project(project_path):
+    tags_path = os.path.join(project_path, 'tags.txt')
+
+    return dd.data.load_tags(tags_path)

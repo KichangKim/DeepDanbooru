@@ -2,8 +2,7 @@ import os
 import sqlite3
 
 
-def load_tags(project_path):
-    tags_path = os.path.join(project_path, 'tags.txt')
+def load_tags(tags_path):
     with open(tags_path, 'r') as tags_stream:
         tags = [tag for tag in (tag.strip() for tag in tags_stream) if tag]
         return tags
