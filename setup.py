@@ -4,7 +4,7 @@ import setuptools
 import re
 
 
-with open("README.md", "r") as fh:
+with open("README.md", "r", encoding='utf-8') as fh:
     long_description = fh.read()
 
 
@@ -38,5 +38,10 @@ setuptools.setup(
     extras_require={
         'tensorflow': ['tensorflow==2.1.0rc1'],
         'test': ['pytest', 'flake8', 'mypy']
+    },
+    entry_points={
+        "console_scripts": [
+            "deepdanbooru=deepdanbooru.__main__:main",
+        ]
     },
 )
