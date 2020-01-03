@@ -166,14 +166,14 @@ def create_resnet_custom_v2(x, output_dim):
 
 def create_resnet_custom_v3(x, output_dim):
     """
-    Experimental (blazing-deep network)
-    Deep, narrow
+    DeepDanbooru web (until 2019/04/20)
+    Short, wide
     """
-    filter_sizes = [256, 512, 1024, 1024, 1024, 2048]
-    repeat_sizes = [2, 7, 40, 16, 16, 6]
+    filter_sizes = [256, 512, 1024, 1024, 2048, 4096]
+    repeat_sizes = [2, 7, 19, 19, 2, 2]
 
-    x = resnet_longterm_bottleneck_model(
-        x, filter_sizes=filter_sizes, repeat_sizes=repeat_sizes, final_pool=False, se=False)
+    x = resnet_original_bottleneck_model(
+        x, filter_sizes=filter_sizes, repeat_sizes=repeat_sizes, final_pool=False)
 
     x = dd.model.layers.conv_gap(x, output_dim)
     x = tf.keras.layers.Activation('sigmoid')(x)
