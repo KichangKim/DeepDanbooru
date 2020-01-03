@@ -13,11 +13,11 @@ with open('deepdanbooru/__main__.py', encoding='utf-8') as f:
 
 
 setuptools.setup(
-    name="DeepDanbooru",
+    name="deepdanbooru",
     version=version,
     author="Kichang Kim",
     author_email="admin@kanotype.net",
-    description="AI based multi-label girl image classification system, "
+    description="DeepDanbooru is AI based multi-label girl image classification system, "
     "implemented by using TensorFlow.",
     long_description=long_description,
     long_description_content_type="text/markdown",
