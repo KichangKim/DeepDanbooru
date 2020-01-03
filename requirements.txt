@@ -2,3 +2,4 @@ Click>=7.0
 numpy>=1.16.2
 scikit-image>=0.15.0
 tensorflow>=2.1.0rc1
+requests>=2.22.0
