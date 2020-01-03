@@ -68,7 +68,7 @@ def grad_cam(project_path, target_path, output_path, threshold):
     dd.commands.grad_cam(project_path, target_path, output_path, threshold)
 
 
-@main.command('evaluate', help='Evaluate model by estimating image tag.')
+@main.command('evaluate', help='Evaluate model by estimating image tag. TARGET_PATHS can be image file or folder contains multiple image files.')
 @click.argument('target_paths', nargs=-1, type=click.Path(exists=True, resolve_path=True, file_okay=True, dir_okay=True))
 @click.option('--project-path', type=click.Path(exists=True, resolve_path=True, file_okay=False, dir_okay=True),
               help='Project path. If you want to use specific model and tags, use --model-path and --tags-path options.')
@@ -79,9 +79,6 @@ def grad_cam(project_path, target_path, output_path, threshold):
 @click.option('--compile/--no-compile', 'compile_model', default=False)
 @click.option('--verbose', default=False)
 def evaluate(target_paths, project_path, model_path, tags_path, threshold, allow_gpu, compile_model, verbose):
-    '''
-    TARGET_PATHS can be image file or folder contains multiple image files.
-    '''
     dd.commands.evaluate(target_paths, project_path, model_path, tags_path, threshold, allow_gpu, compile_model, verbose)
 
 
