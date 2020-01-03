@@ -50,7 +50,7 @@ To install it with tensorflow, add `tensorflow` extra package.
 ```
 7. Enjoy it.
 ```
-> deepdanbooru evaluate-project [your_project_folder] [image_file_path]
+> deepdanbooru evaluate [image_file_path or folder] --project-path [your_project_folder] 
 ```
 
 8. Estimate image tags.
