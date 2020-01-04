@@ -17,6 +17,7 @@ install_requires = [
     'numpy>=1.16.2',
     'scikit-image>=0.15.0',
     'requests>=2.22.0',
+    'six>=1.13.0',
 ]
 tensorflow_pkg = 'tensorflow>=2.1.0rc1'
 

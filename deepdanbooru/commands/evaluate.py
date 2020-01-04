@@ -1,16 +1,20 @@
 import os
+from typing import Any, Iterable, List, Tuple, Union
 
+import six
 import tensorflow as tf
 
 import deepdanbooru as dd
 
 
-def evaluate_image(image_path: str, model, tags: list, threshold):
+def evaluate_image(
+    image_input: Union[str, six.BytesIO], model: Any, tags: List[str], threshold: float
+) -> Iterable[Tuple[str, float]]:
     width = model.input_shape[2]
     height = model.input_shape[1]
 
     image = dd.data.load_image_for_evaluate(
-        image_path, width=width, height=height)
+        image_input, width=width, height=height)
 
     image_shape = image.shape
     image = image.reshape(

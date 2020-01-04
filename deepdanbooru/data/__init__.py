@@ -1,13 +1,21 @@
+from typing import Any, Union
+
+import six
 import tensorflow as tf
+
 import deepdanbooru as dd
 
+from .dataset import load_image_records, load_tags
 from .dataset_wrapper import DatasetWrapper
-from .dataset import load_image_records
-from .dataset import load_tags
 
 
-def load_image_for_evaluate(path, width, height, normalize=True):
-    image_raw = tf.io.read_file(path)
+def load_image_for_evaluate(
+        input_: Union[str, six.BytesIO], width: int, height: int, normalize: bool = True
+) -> Any:
+    if isinstance(input_, six.BytesIO):
+        image_raw = input_.getvalue()
+    else:
+        image_raw = tf.io.read_file(input_)
     image = tf.io.decode_png(image_raw, channels=3)
 
     image = tf.image.resize(
