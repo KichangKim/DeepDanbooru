@@ -3,8 +3,11 @@
 import importlib
 from unittest import mock
 
+import numpy
 import pytest
+import six
 from click.testing import CliRunner
+from PIL import Image
 
 
 def test_import():
@@ -58,3 +61,19 @@ def test_readme_pkg(packages):
     ) == list(
         filter(lambda x: x.startswith('tensorflow'), readme_pkgs)
     )
+
+
+@pytest.mark.parametrize('use_bytes_io', [True, False])
+def test_load_image_for_evaluate(tmp_path, use_bytes_io):
+    image_path = tmp_path / 'test.jpg'
+    image = Image.new('RGB', (300, 300), color='red')
+    image.save(image_path)
+    from deepdanbooru.data import load_image_for_evaluate
+    if not use_bytes_io:
+        res = load_image_for_evaluate(image_path.as_posix(), 299, 299)
+    else:
+        with open(image_path.as_posix(), 'rb') as f:
+            image_input = six.BytesIO(f.read())
+        res = load_image_for_evaluate(image_input, 299, 299)
+    assert isinstance(res, numpy.ndarray)
+    assert res.shape == (299, 299, 3)
