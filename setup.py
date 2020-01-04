@@ -12,6 +12,14 @@ with open('deepdanbooru/__main__.py', encoding='utf-8') as f:
     version = re.search('__version__ = \'([^\']+)\'', f.read()).group(1)  # type: ignore
 
 
+install_requires = [
+    'Click>=7.0',
+    'numpy>=1.16.2',
+    'scikit-image>=0.15.0',
+    'requests>=2.22.0',
+]
+tensorflow_pkg = 'tensorflow>=2.1.0rc1'
+
 setuptools.setup(
     name="deepdanbooru",
     version=version,
@@ -29,14 +37,9 @@ setuptools.setup(
         "Operating System :: OS Independent",
     ],
     python_requires='>=3.6',
-    install_requires=[
-        'Click==7.0',
-        'numpy>=1.16.2+mkl',
-        'scikit-image==0.15.0',
-        'requests>=2.22.0',
-    ],
+    install_requires=install_requires,
     extras_require={
-        'tensorflow': ['tensorflow==2.1.0rc1'],
+        'tensorflow': [tensorflow_pkg],
         'test': ['pytest', 'flake8', 'mypy']
     },
     entry_points={
