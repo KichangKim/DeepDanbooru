@@ -19,7 +19,7 @@ install_requires = [
     'requests>=2.22.0',
     'six>=1.13.0',
 ]
-tensorflow_pkg = 'tensorflow>=2.1.0rc1'
+tensorflow_pkg = 'tensorflow>=2.1.0'
 
 setuptools.setup(
     name="deepdanbooru",
