@@ -28,7 +28,7 @@ def download_category_tags(category, minimum_post_count, limit, page_size=1000, 
         'search[category]': category_index
     }
 
-    request_url = 'http://danbooru.donmai.us/tags.json'
+    request_url = 'https://danbooru.donmai.us/tags.json'
 
     tags = set()
 
