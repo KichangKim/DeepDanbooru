@@ -52,7 +52,7 @@ To install it with tensorflow, add `tensorflow` extra package.
 ```
 7. Enjoy it.
 ```
-> deepdanbooru evaluate [image_file_path or folder]... --project-path [your_project_folder] 
+> deepdanbooru evaluate [image_file_path or folder]... --project-path [your_project_folder] --allow-folder
 ```
 
 ## Dataset Structure
