@@ -55,10 +55,10 @@ def grad_cam(project_path, target_path, output_path, threshold):
 
         taget_image_paths = dd.extra.natural_sorted(taget_image_paths)
 
-    project_context, model, tags = dd.project.load_project(project_path)
-
-    width = project_context['image_width']
-    height = project_context['image_height']
+    model = dd.project.load_model_from_project(project_path)
+    tags = dd.project.load_tags_from_project(project_path)
+    width = model.input_shape[2]
+    height = model.input_shape[1]
 
     dd.io.try_create_directory(output_path)
 
