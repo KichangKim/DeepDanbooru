@@ -76,7 +76,7 @@ def train_project(project_path):
     model = tf.keras.Model(inputs=inputs, outputs=ouputs, name=model_type)
     print(f'Model : {model.input_shape} -> {model.output_shape}')
 
-    model.compile(optimizer=optimizer, loss=tf.keras.losses.BinaryCrossentropy(),
+    model.compile(optimizer=optimizer, loss=dd.model.losses.binary_crossentropy(),
                   metrics=[tf.keras.metrics.Precision(), tf.keras.metrics.Recall()])
 
     print(f'Loading database ... ')
