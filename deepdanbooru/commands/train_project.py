@@ -8,7 +8,7 @@ import tensorflow as tf
 import deepdanbooru as dd
 
 
-def train_project(project_path):
+def train_project(project_path, source_model):
     project_context_path = os.path.join(project_path, 'project.json')
     project_context = dd.io.deserialize_from_json(project_context_path)
 
@@ -34,7 +34,7 @@ def train_project(project_path):
     os.environ["TF_CPP_MIN_LOG_LEVEL"] = "2"
     # tf.logging.set_verbosity(tf.logging.ERROR)
 
-    # tf.keras.backend.set_epsilon(1e-4)
+    # tf.keras.backend.set_epsilon(1e-6)
     # tf.keras.mixed_precision.experimental.set_policy('infer_float32_vars')
     # tf.config.gpu.set_per_process_memory_growth(True)
 
@@ -60,6 +60,8 @@ def train_project(project_path):
         model_delegate = dd.model.resnet.create_resnet_custom_v2
     elif model_type == 'resnet_custom_v3':
         model_delegate = dd.model.resnet.create_resnet_custom_v3
+    elif model_type == 'resnet_custom_v4':
+        model_delegate = dd.model.resnet.create_resnet_custom_v4
     else:
         raise Exception(f'Not supported model : {model_type}')
 
@@ -70,13 +72,17 @@ def train_project(project_path):
     print(f'Creating model ({model_type}) ... ')
     # tf.keras.backend.set_learning_phase(1)
 
-    inputs = tf.keras.Input(shape=(height, width, 3),
-                            dtype=tf.float32)  # HWC
-    ouputs = model_delegate(inputs, output_dim)
-    model = tf.keras.Model(inputs=inputs, outputs=ouputs, name=model_type)
-    print(f'Model : {model.input_shape} -> {model.output_shape}')
+    if source_model:
+        model = tf.keras.models.load_model(source_model)
+        print(f'Model : {model.input_shape} -> {model.output_shape} (loaded from {source_model})')
+    else:
+        inputs = tf.keras.Input(shape=(height, width, 3),
+                                dtype=tf.float32)  # HWC
+        ouputs = model_delegate(inputs, output_dim)
+        model = tf.keras.Model(inputs=inputs, outputs=ouputs, name=model_type)
+        print(f'Model : {model.input_shape} -> {model.output_shape}')
 
-    model.compile(optimizer=optimizer, loss=dd.model.losses.binary_crossentropy(),
+    model.compile(optimizer=optimizer, loss=tf.keras.losses.BinaryCrossentropy(),
                   metrics=[tf.keras.metrics.Precision(), tf.keras.metrics.Recall()])
 
     print(f'Loading database ... ')
@@ -105,11 +111,11 @@ def train_project(project_path):
         max_to_keep=3)
 
     if manager.latest_checkpoint:
-        print("Checkpoint exists. Continuing training ...")
+        print(f"Checkpoint exists. Continuing training ... ({datetime.datetime.now()})")
         checkpoint.restore(manager.latest_checkpoint)
         print(f'used_epoch={int(used_epoch)}, used_minibatch={int(used_minibatch)}, used_sample={int(used_sample)}, offset={int(offset)}, random_seed={int(random_seed)}')
     else:
-        print('No checkpoint. Starting new training ...')
+        print(f'No checkpoint. Starting new training ... ({datetime.datetime.now()})')
 
     epoch_size = len(image_records)
     slice_size = minibatch_size * checkpoint_frequency_mb
@@ -190,7 +196,7 @@ def train_project(project_path):
                     last_time = current_time
 
             offset.assign_add(slice_size)
-            print('Saving checkpoint ... ')
+            print(f'Saving checkpoint ... ({datetime.datetime.now()})')
             manager.save()
 
         used_epoch.assign_add(1)

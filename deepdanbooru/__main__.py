@@ -47,8 +47,9 @@ def make_training_database(source_path, output_path, start_id, end_id, use_delet
 
 @main.command('train-project')
 @click.argument('project_path', type=click.Path(exists=True, resolve_path=True, file_okay=False, dir_okay=True))
-def train_project(project_path):
-    dd.commands.train_project(project_path)
+@click.option('--source-model', type=click.Path(exists=True, resolve_path=True, file_okay=True, dir_okay=False))
+def train_project(project_path, source_model):
+    dd.commands.train_project(project_path, source_model)
 
 
 @main.command('evaluate-project', help='Evaluate the project. If the target path is folder, it evaulates all images recursively.')
