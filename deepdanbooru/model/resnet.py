@@ -125,7 +125,7 @@ def create_resnet_152(x, output_dim):
 
     x = tf.keras.layers.Flatten()(x)
     x = tf.keras.layers.Dense(output_dim)(x)
-    x = tf.keras.layers.Activation('sigmoid')(x)
+    x = tf.keras.layers.Activation('sigmoid', dtype='float32')(x)
 
     return x
 
@@ -142,7 +142,7 @@ def create_resnet_custom_v1(x, output_dim):
         x, filter_sizes=filter_sizes, repeat_sizes=repeat_sizes, final_pool=False)
 
     x = dd.model.layers.conv_gap(x, output_dim)
-    x = tf.keras.layers.Activation('sigmoid')(x)
+    x = tf.keras.layers.Activation('sigmoid', dtype='float32')(x)
 
     return x
 
@@ -159,7 +159,7 @@ def create_resnet_custom_v2(x, output_dim):
         x, filter_sizes=filter_sizes, repeat_sizes=repeat_sizes, final_pool=False)
 
     x = dd.model.layers.conv_gap(x, output_dim)
-    x = tf.keras.layers.Activation('sigmoid')(x)
+    x = tf.keras.layers.Activation('sigmoid', dtype='float32')(x)
 
     return x
 
@@ -172,7 +172,7 @@ def create_resnet_custom_v3(x, output_dim):
         x, filter_sizes=filter_sizes, repeat_sizes=repeat_sizes, final_pool=False)
 
     x = dd.model.layers.conv_gap(x, output_dim)
-    x = tf.keras.layers.Activation('sigmoid')(x)
+    x = tf.keras.layers.Activation('sigmoid', dtype='float32')(x)
 
     return x
 
@@ -185,6 +185,6 @@ def create_resnet_custom_v4(x, output_dim):
         x, filter_sizes=filter_sizes, repeat_sizes=repeat_sizes, final_pool=False)
 
     x = dd.model.layers.conv_gap(x, output_dim)
-    x = tf.keras.layers.Activation('sigmoid')(x)
+    x = tf.keras.layers.Activation('sigmoid', dtype='float32')(x)
 
     return x

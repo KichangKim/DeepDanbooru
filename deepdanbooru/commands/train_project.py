@@ -8,6 +8,23 @@ import tensorflow as tf
 import deepdanbooru as dd
 
 
+def export_model_as_float32(temporary_model, checkpoint_path, export_path):
+    '''
+    Hotfix for exporting mixed precision model as float32.
+    '''
+    checkpoint = tf.train.Checkpoint(
+        model=temporary_model)
+
+    manager = tf.train.CheckpointManager(
+        checkpoint=checkpoint,
+        directory=checkpoint_path,
+        max_to_keep=3)
+
+    checkpoint.restore(manager.latest_checkpoint)
+
+    temporary_model.save(export_path, include_optimizer=False)
+
+
 def train_project(project_path, source_model):
     project_context_path = os.path.join(project_path, 'project.json')
     project_context = dd.io.deserialize_from_json(project_context_path)
@@ -29,6 +46,8 @@ def train_project(project_path, source_model):
     rotation_range = project_context['rotation_range']
     scale_range = project_context['scale_range']
     shift_range = project_context['shift_range']
+    use_mixed_precision = project_context['mixed_precision'] if 'mixed_precision' in project_context else False
+    checkpoint_path = os.path.join(project_path, 'checkpoints')
 
     # disable PNG warning
     os.environ["TF_CPP_MIN_LOG_LEVEL"] = "2"
@@ -51,6 +70,10 @@ def train_project(project_path, source_model):
     else:
         raise Exception(
             f"Not supported optimizer : {optimizer_type}")
+
+    if use_mixed_precision:
+        optimizer = tf.keras.mixed_precision.LossScaleOptimizer(optimizer)
+        print('Optimizer is changed to LossScaleOptimizer.')
 
     if model_type == 'resnet_152':
         model_delegate = dd.model.resnet.create_resnet_152
@@ -76,10 +99,26 @@ def train_project(project_path, source_model):
         model = tf.keras.models.load_model(source_model)
         print(f'Model : {model.input_shape} -> {model.output_shape} (loaded from {source_model})')
     else:
+        if use_mixed_precision:
+            policy = tf.keras.mixed_precision.Policy('mixed_float16')
+            tf.keras.mixed_precision.set_global_policy(policy)
+
         inputs = tf.keras.Input(shape=(height, width, 3),
                                 dtype=tf.float32)  # HWC
         ouputs = model_delegate(inputs, output_dim)
         model = tf.keras.Model(inputs=inputs, outputs=ouputs, name=model_type)
+
+        if use_mixed_precision:
+            policy = tf.keras.mixed_precision.Policy('float32')
+            tf.keras.mixed_precision.set_global_policy(policy)
+
+            inputs_float32 = tf.keras.Input(shape=(height, width, 3),
+                                            dtype=tf.float32)  # HWC
+            ouputs_float32 = model_delegate(inputs_float32, output_dim)
+            model_float32 = tf.keras.Model(inputs=inputs_float32, outputs=ouputs_float32, name=model_type)
+
+            print('float32 model is created.')
+
         print(f'Model : {model.input_shape} -> {model.output_shape}')
 
     model.compile(optimizer=optimizer, loss=tf.keras.losses.BinaryCrossentropy(),
@@ -107,7 +146,7 @@ def train_project(project_path, source_model):
 
     manager = tf.train.CheckpointManager(
         checkpoint=checkpoint,
-        directory=os.path.join(project_path, 'checkpoints'),
+        directory=checkpoint_path,
         max_to_keep=3)
 
     if manager.latest_checkpoint:
@@ -203,11 +242,14 @@ def train_project(project_path, source_model):
         random_seed.assign_add(1)
         offset.assign(0)
 
-        if int(used_epoch) % export_model_per_epoch == 0:
+        if export_model_per_epoch == 0 or int(used_epoch) % export_model_per_epoch == 0:
             print('Saving model ... (per epoch {export_model_per_epoch})')
             export_path = os.path.join(
                 project_path, f'model-{model_type}.h5.e{int(used_epoch)}')
             model.save(export_path, include_optimizer=False, save_format='h5')
+
+            if use_mixed_precision:
+                export_model_as_float32(model_float32, checkpoint_path, export_path + '.float32.h5')
 
     print('Saving model ...')
     model_path = os.path.join(
@@ -216,6 +258,9 @@ def train_project(project_path, source_model):
     # tf.keras.experimental.export_saved_model throw exception now
     # see https://github.com/tensorflow/tensorflow/issues/27112
     model.save(model_path, include_optimizer=False)
+
+    if use_mixed_precision:
+        export_model_as_float32(model_float32, checkpoint_path, model_path + '.float32.h5')
 
     print('Training is complete.')
     print(

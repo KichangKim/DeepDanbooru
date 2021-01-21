@@ -17,7 +17,8 @@ DEFAULT_PROJECT_CONTEXT = {
     'learning_rate': 0.001,
     'rotation_range': [0.0, 360.0],
     'scale_range': [0.9, 1.1],
-    'shift_range': [-0.1, 0.1]
+    'shift_range': [-0.1, 0.1],
+    'mixed_precision': False
 }
 
 
