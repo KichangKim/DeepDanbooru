@@ -20,7 +20,7 @@ def export_model_as_float32(temporary_model, checkpoint_path, export_path):
         directory=checkpoint_path,
         max_to_keep=3)
 
-    checkpoint.restore(manager.latest_checkpoint)
+    checkpoint.restore(manager.latest_checkpoint).expect_partial()
 
     temporary_model.save(export_path, include_optimizer=False)
 
