@@ -1,28 +1,64 @@
 import tensorflow as tf
 
 
-def conv(x, filters, kernel_size, strides=(1, 1), padding='same', initializer='he_normal'):
+def conv(
+    x, filters, kernel_size, strides=(1, 1), padding="same", initializer="he_normal"
+):
     c = tf.keras.layers.Conv2D(
-        filters=filters, kernel_size=kernel_size, strides=strides, padding=padding, kernel_initializer=initializer, use_bias=False)(x)
+        filters=filters,
+        kernel_size=kernel_size,
+        strides=strides,
+        padding=padding,
+        kernel_initializer=initializer,
+        use_bias=False,
+    )(x)
 
     return c
 
 
-def conv_bn(x, filters, kernel_size, strides=(1, 1), padding='same', initializer='he_normal', bn_gamma_initializer='ones'):
-    c = conv(x, filters=filters, kernel_size=kernel_size,
-             strides=strides, padding=padding, initializer=initializer)
+def conv_bn(
+    x,
+    filters,
+    kernel_size,
+    strides=(1, 1),
+    padding="same",
+    initializer="he_normal",
+    bn_gamma_initializer="ones",
+):
+    c = conv(
+        x,
+        filters=filters,
+        kernel_size=kernel_size,
+        strides=strides,
+        padding=padding,
+        initializer=initializer,
+    )
 
-    c_bn = tf.keras.layers.BatchNormalization(
-        gamma_initializer=bn_gamma_initializer)(c)
+    c_bn = tf.keras.layers.BatchNormalization(gamma_initializer=bn_gamma_initializer)(c)
 
     return c_bn
 
 
-def conv_bn_relu(x, filters, kernel_size, strides=(1, 1), padding='same', initializer='he_normal', bn_gamma_initializer='ones'):
-    c_bn = conv_bn(x, filters=filters, kernel_size=kernel_size, strides=strides, padding=padding,
-                   initializer=initializer, bn_gamma_initializer=bn_gamma_initializer)
+def conv_bn_relu(
+    x,
+    filters,
+    kernel_size,
+    strides=(1, 1),
+    padding="same",
+    initializer="he_normal",
+    bn_gamma_initializer="ones",
+):
+    c_bn = conv_bn(
+        x,
+        filters=filters,
+        kernel_size=kernel_size,
+        strides=strides,
+        padding=padding,
+        initializer=initializer,
+        bn_gamma_initializer=bn_gamma_initializer,
+    )
 
-    return tf.keras.layers.Activation('relu')(c_bn)
+    return tf.keras.layers.Activation("relu")(c_bn)
 
 
 def conv_gap(x, output_filters, kernel_size=(1, 1)):
@@ -51,10 +87,8 @@ def squeeze_excitation(x, reduction=16):
     s = x
 
     s = tf.keras.layers.GlobalAveragePooling2D()(s)
-    s = tf.keras.layers.Dense(
-        output_filters//reduction, activation='relu')(x)
-    s = tf.keras.layers.Dense(
-        output_filters, activation='sigmoid')(x)
+    s = tf.keras.layers.Dense(output_filters // reduction, activation="relu")(x)
+    s = tf.keras.layers.Dense(output_filters, activation="sigmoid")(x)
     x = tf.keras.layers.Multiply()([x, s])
 
     return x

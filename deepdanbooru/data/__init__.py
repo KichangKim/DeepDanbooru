@@ -10,7 +10,7 @@ from .dataset_wrapper import DatasetWrapper
 
 
 def load_image_for_evaluate(
-        input_: Union[str, six.BytesIO], width: int, height: int, normalize: bool = True
+    input_: Union[str, six.BytesIO], width: int, height: int, normalize: bool = True
 ) -> Any:
     if isinstance(input_, six.BytesIO):
         image_raw = input_.getvalue()
@@ -19,7 +19,11 @@ def load_image_for_evaluate(
     image = tf.io.decode_png(image_raw, channels=3)
 
     image = tf.image.resize(
-        image, size=(height, width), method=tf.image.ResizeMethod.AREA, preserve_aspect_ratio=True)
+        image,
+        size=(height, width),
+        method=tf.image.ResizeMethod.AREA,
+        preserve_aspect_ratio=True,
+    )
     image = image.numpy()  # EagerTensor to np.array
     image = dd.image.transform_and_pad_image(image, width, height)
 

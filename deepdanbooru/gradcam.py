@@ -12,15 +12,17 @@ import numpy as np
 
 
 def grad(y, x):
-    V = tf.keras.layers.Lambda(lambda z: tf.gradients(
-        z[0], z[1]), output_shape=[1])([y, x])
+    V = tf.keras.layers.Lambda(lambda z: tf.gradients(z[0], z[1]), output_shape=[1])(
+        [y, x]
+    )
     return V
 
 
 def grad_cam_test(model, x, some_variable):
     fixed_input = model.inputs
-    fixed_output = tf.keras.layers.Lambda(lambda z: tf.keras.backend.gradients(
-        z[0], z[1]), output_shape=[2])([model.inputs[0], model.outputs[0]])
+    fixed_output = tf.keras.layers.Lambda(
+        lambda z: tf.keras.backend.gradients(z[0], z[1]), output_shape=[2]
+    )([model.inputs[0], model.outputs[0]])
 
     grad_model = tf.keras.Model(inputs=fixed_input, outputs=fixed_output)
 
@@ -37,12 +39,12 @@ def run_test():
     # Calculate gradient using numpy array
     input_numpy = np.array([[0.0, 0.0]])
     grad_output_numpy = grad_cam_test(model, input_numpy, target)
-    print(f'numpy: {grad_output_numpy}')
+    print(f"numpy: {grad_output_numpy}")
 
     # Calculate gradient using tf.Variable
     input_variable = tf.constant([[0.0, 0.0]])
     grad_output_variable = grad_cam_test(model, input_variable, target)
-    print(f'variable: {grad_output_variable}')
+    print(f"variable: {grad_output_variable}")
 
 
 run_test()

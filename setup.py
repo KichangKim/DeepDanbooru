@@ -4,22 +4,22 @@ import re
 
 import setuptools
 
-with open("README.md", "r", encoding='utf-8') as fh:
+with open("README.md", "r", encoding="utf-8") as fh:
     long_description = fh.read()
 
 
-with open('deepdanbooru/__main__.py', encoding='utf-8') as f:
-    version = re.search('__version__ = \'([^\']+)\'', f.read()).group(1)  # type: ignore
+with open("deepdanbooru/__main__.py", encoding="utf-8") as f:
+    version = re.search("__version__ = '([^']+)'", f.read()).group(1)  # type: ignore
 
 
 install_requires = [
-    'Click>=7.0',
-    'numpy>=1.16.2',
-    'scikit-image>=0.15.0',
-    'requests>=2.22.0',
-    'six>=1.13.0',
+    "Click>=7.0",
+    "numpy>=1.16.2",
+    "scikit-image>=0.15.0",
+    "requests>=2.22.0",
+    "six>=1.13.0",
 ]
-tensorflow_pkg = 'tensorflow>=2.3.1'
+tensorflow_pkg = "tensorflow>=2.3.1"
 
 setuptools.setup(
     name="deepdanbooru",
@@ -37,11 +37,11 @@ setuptools.setup(
         "License :: OSI Approved :: MIT License",
         "Operating System :: OS Independent",
     ],
-    python_requires='>=3.6',
+    python_requires=">=3.6",
     install_requires=install_requires,
     extras_require={
-        'tensorflow': [tensorflow_pkg],
-        'test': ['pytest', 'flake8', 'mypy']
+        "tensorflow": [tensorflow_pkg],
+        "test": ["pytest", "flake8", "mypy"],
     },
     entry_points={
         "console_scripts": [
