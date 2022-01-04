@@ -9,7 +9,7 @@ with open("README.md", "r", encoding="utf-8") as fh:
 
 
 with open("deepdanbooru/__main__.py", encoding="utf-8") as f:
-    version = re.search("__version__ = '([^']+)'", f.read()).group(1)  # type: ignore
+    version = re.search('__version__ = "([^"]+)"', f.read()).group(1)  # type: ignore
 
 
 install_requires = [
