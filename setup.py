@@ -20,8 +20,8 @@ install_requires = [
     "six>=1.13.0",
 ]
 tensorflow_pkg = [
-    "tensorflow>=2.3.1",
-    "tensorflow-io>=0.15.0",
+    "tensorflow>=2.7.0",
+    "tensorflow-io>=0.22.0",
 ]
 
 setuptools.setup(
