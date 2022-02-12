@@ -2,6 +2,7 @@ import random
 
 import numpy as np
 import tensorflow as tf
+import tensorflow_io as tfio
 
 import deepdanbooru as dd
 
@@ -41,7 +42,11 @@ class DatasetWrapper:
 
     def map_load_image(self, image_path, tag_string):
         image_raw = tf.io.read_file(image_path)
-        image = tf.io.decode_png(image_raw, channels=3)
+        try:
+            image = tf.io.decode_png(image_raw, channels=3)
+        except:
+            image = tfio.image.decode_webp(image_raw)
+            image = tfio.experimental.color.rgba_to_rgb(image)
 
         if self.scale_range:
             pre_scale = self.scale_range[1]

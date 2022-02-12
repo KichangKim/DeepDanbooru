@@ -2,6 +2,7 @@ from typing import Any, Union
 
 import six
 import tensorflow as tf
+import tensorflow_io as tfio
 
 import deepdanbooru as dd
 
@@ -16,7 +17,11 @@ def load_image_for_evaluate(
         image_raw = input_.getvalue()
     else:
         image_raw = tf.io.read_file(input_)
-    image = tf.io.decode_png(image_raw, channels=3)
+    try:
+        image = tf.io.decode_png(image_raw, channels=3)
+    except:
+        image = tfio.image.decode_webp(image_raw)
+        image = tfio.experimental.color.rgba_to_rgb(image)
 
     image = tf.image.resize(
         image,
