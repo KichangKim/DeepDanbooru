@@ -75,6 +75,7 @@ def download_tags(project_path, limit, minimum_post_count, is_overwrite):
 
     system_tags = [
         "rating:safe",
+        "rating:general",
         "rating:questionable",
         "rating:explicit",
         # 'score:very_bad',

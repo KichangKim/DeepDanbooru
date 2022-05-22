@@ -91,6 +91,8 @@ def make_training_database(
 
             if rating == "s":
                 tags += f" rating:safe"
+            elif rating == "g":
+                tags += f" rating:general"
             elif rating == "q":
                 tags += f" rating:questionable"
             elif rating == "e":
