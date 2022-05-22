@@ -87,8 +87,8 @@ def squeeze_excitation(x, reduction=16):
     s = x
 
     s = tf.keras.layers.GlobalAveragePooling2D()(s)
-    s = tf.keras.layers.Dense(output_filters // reduction, activation="relu")(x)
-    s = tf.keras.layers.Dense(output_filters, activation="sigmoid")(x)
+    s = tf.keras.layers.Dense(output_filters // reduction, activation="relu")(s)
+    s = tf.keras.layers.Dense(output_filters, activation="sigmoid")(s)
     x = tf.keras.layers.Multiply()([x, s])
 
     return x
