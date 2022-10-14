@@ -1,7 +1,7 @@
 import sys
-
 import click
-
+import warnings
+import os
 import deepdanbooru as dd
 import tensorflow.lite as tflite
 
@@ -184,6 +184,9 @@ def evaluate(
     folder_filters,
     verbose,
 ):
+    if verbose:
+        warnings.filterwarnings("always")
+        os.environ['TF_CPP_MIN_LOG_LEVEL'] = '0'
     dd.commands.evaluate(
         target_paths,
         project_path,
@@ -215,6 +218,9 @@ def evaluate(
 @click.option("--optimize-experimental-sparsity", default=False, is_flag=True)
 @click.option("--verbose", default=False, is_flag=True)
 def conv2tflite(project_path, model_path, save_path, optimize_default, optimize_experimental_sparsity, verbose):
+    if verbose:
+        warnings.filterwarnings("always")
+        os.environ['TF_CPP_MIN_LOG_LEVEL'] = '0'
     if not optimize_default and not optimize_experimental_sparsity:
         raise Exception("optimization method must be specified")
     op = []

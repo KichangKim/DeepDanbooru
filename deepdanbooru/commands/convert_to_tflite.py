@@ -24,14 +24,14 @@ def convert_to_tflite_from_from_saved_model(
         model = dd.project.load_model_from_project(project_path)
 
     if verbose:
-            print(f"Converting ...")
+        print("Converting ...")
 
     converter = tf.lite.TFLiteConverter.from_keras_model(model)
     converter.optimizations = optimizations
     tflite_model = converter.convert()
 
     if verbose:
-        print(f"Saving ...")
+        print("Saving ...")
 
     with open(save_path, "wb") as f:
         f.write(tflite_model)
