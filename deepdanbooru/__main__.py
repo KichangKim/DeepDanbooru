@@ -217,6 +217,7 @@ def evaluate(
 )
 @click.option("--verbose", default=False, is_flag=True)
 def conv2tflite(optimizations, project_path, model_path, save_path, verbose):
+    if not optimizations: dd.commands.convert_to_tflite_from_from_saved_model(project_path, model_path, save_path, verbose=verbose)
     dd.commands.convert_to_tflite_from_from_saved_model(project_path, model_path, save_path, optimizations, verbose=verbose)
 
 
