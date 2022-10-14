@@ -196,6 +196,29 @@ def evaluate(
         verbose,
     )
 
+@main.command("conv2tflite", help="Convert saved model into tflite model.")
+@click.argument(
+    "optimizations",
+    nargs=-1,
+    type=click.STRING,
+)
+@click.option(
+    "--project-path",
+    type=click.Path(exists=True, resolve_path=True, file_okay=False, dir_okay=True),
+    help="Project path. If you want to use specific model and tags, use --model-path and --tags-path options.",
+)
+@click.option(
+    "--model-path",
+    type=click.Path(exists=True, resolve_path=True, file_okay=True, dir_okay=False),
+)
+@click.option(
+    "--save-path",
+    type=click.Path(resolve_path=True, file_okay=True, dir_okay=False),
+)
+@click.option("--verbose", default=False, is_flag=True)
+def conv2tflite(optimizations, project_path, model_path, save_path, verbose):
+    dd.commands.convert_to_tflite_from_from_saved_model(project_path, model_path, save_path, optimizations, verbose=verbose)
+
 
 if __name__ == "__main__":
     main()
