@@ -30,15 +30,15 @@ def create_project(project_path):
 @click.option("--limit", default=10000, help="Limit for each category tag count.")
 @click.option("--minimum-post-count", default=500, help="Minimum post count for tag.")
 @click.option("--overwrite", help="Overwrite tags if exists.", is_flag=True)
-@click.option("--login", help="Danbooru username for authentication.", required=True)
+@click.option("--username", help="Danbooru username for authentication.", required=True)
 @click.option("--api-key", help="Danbooru API key for authentication.", required=True)
 @click.argument(
     "path",
     type=click.Path(exists=False, resolve_path=True, file_okay=False, dir_okay=True),
 )
-def download_tags(path, limit, minimum_post_count, overwrite, login, api_key):
+def download_tags(path, limit, minimum_post_count, overwrite, username, api_key):
     dd.commands.download_tags(
-        path, limit, minimum_post_count, overwrite, login, api_key
+        path, limit, minimum_post_count, overwrite, username, api_key
     )
 
 

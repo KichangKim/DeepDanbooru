@@ -7,7 +7,13 @@ import deepdanbooru as dd
 
 
 def download_category_tags(
-    category, minimum_post_count, limit, login, api_key, page_size=1000, order="count"
+    category,
+    minimum_post_count,
+    limit,
+    username,
+    api_key,
+    page_size=1000,
+    order="count",
 ):
     category_to_index = {"general": 0, "artist": 1, "copyright": 3, "character": 4}
 
@@ -23,7 +29,7 @@ def download_category_tags(
         "page": 1,
         "search[order]": order,
         "search[category]": category_index,
-        "login": login,
+        "login": username,
         "api_key": api_key,
     }
 
@@ -68,7 +74,7 @@ def download_category_tags(
 
 
 def download_tags(
-    project_path, limit, minimum_post_count, is_overwrite, login, api_key
+    project_path, limit, minimum_post_count, is_overwrite, username, api_key
 ):
     print(
         f"Start downloading tags ... (limit:{limit}, minimum_post_count:{minimum_post_count})"
@@ -136,7 +142,7 @@ def download_tags(
 
             print(f"{category} tags are downloading ...")
             tags = download_category_tags(
-                category, minimum_post_count, limit, login, api_key
+                category, minimum_post_count, limit, username, api_key
             )
 
             tags = dd.extra.natural_sorted(tags)
