@@ -6,16 +6,17 @@ import tensorflow as tf
 
 import deepdanbooru as dd
 
-def save_txt(txt_path, list):
+def save_txt_file(txt_path, list):
     last_index = len(list)-1
     last_tag = list[last_index]
     with open(txt_path, 'w') as writer:
         for i in list:
-            if last_tag is i:
+            if last_tag == i:
                 writer.write(i)
                 writer.close()
             else:
                 writer.write(i + ", ")
+    print("Saved text file.")
 
 def evaluate_image(
     image_input: Union[str, six.BytesIO], model: Any, tags: List[str], threshold: float
@@ -101,5 +102,5 @@ def evaluate(
             if save_txt: tag_list.append(tag)
         if save_txt:
             txt_file_path = str(os.path.splitext(image_path)[0]) + ".txt"
-            save_txt(txt_file_path, tag_list)
+            save_txt_file(txt_file_path, tag_list)
         print()
