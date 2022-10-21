@@ -6,6 +6,10 @@ import tensorflow as tf
 
 import deepdanbooru as dd
 
+def save_txt(txt_path, list):
+    with open(txt_path, 'w') as writer:
+        for i in list:
+            writer.write(i + " , ")
 
 def evaluate_image(
     image_input: Union[str, six.BytesIO], model: Any, tags: List[str], threshold: float
@@ -30,7 +34,7 @@ def evaluate_image(
 
 
 def evaluate(
-    target_paths,
+    target_paths, #this
     project_path,
     model_path,
     tags_path,
@@ -83,8 +87,11 @@ def evaluate(
         tags = dd.project.load_tags_from_project(project_path)
 
     for image_path in target_image_paths:
-        print(f"Tags of {image_path}:")
+        print(f"Tags of {image_path}:") #yup!
+        tag_list = []
         for tag, score in evaluate_image(image_path, model, tags, threshold):
             print(f"({score:05.3f}) {tag}")
-
+            tag_list.append(tag)
+        txt_file_path = str(os.path.splitext(image_path)[0]) + ".txt"
+        save_txt(txt_file_path, tag_list)
         print()

@@ -177,7 +177,7 @@ def grad_cam(project_path, target_path, output_path, threshold):
 )
 @click.option("--verbose", default=False, is_flag=True)
 def evaluate(
-    target_paths,
+    target_paths, # I guess its this one
     project_path,
     model_path,
     tags_path,
