@@ -7,9 +7,15 @@ import tensorflow as tf
 import deepdanbooru as dd
 
 def save_txt(txt_path, list):
+    last_index = len(list)-1
+    last_tag = list[last_index]
     with open(txt_path, 'w') as writer:
         for i in list:
-            writer.write(i + " , ")
+            if last_tag is i:
+                writer.write(i)
+                writer.close()
+            else:
+                writer.write(i + ", ")
 
 def evaluate_image(
     image_input: Union[str, six.BytesIO], model: Any, tags: List[str], threshold: float
@@ -42,6 +48,7 @@ def evaluate(
     allow_gpu,
     compile_model,
     allow_folder,
+    save_txt,
     folder_filters,
     verbose,
 ):
@@ -88,10 +95,11 @@ def evaluate(
 
     for image_path in target_image_paths:
         print(f"Tags of {image_path}:") #yup!
-        tag_list = []
+        if save_txt: tag_list = []
         for tag, score in evaluate_image(image_path, model, tags, threshold):
             print(f"({score:05.3f}) {tag}")
-            tag_list.append(tag)
-        txt_file_path = str(os.path.splitext(image_path)[0]) + ".txt"
-        save_txt(txt_file_path, tag_list)
+            if save_txt: tag_list.append(tag)
+        if save_txt:
+            txt_file_path = str(os.path.splitext(image_path)[0]) + ".txt"
+            save_txt(txt_file_path, tag_list)
         print()
