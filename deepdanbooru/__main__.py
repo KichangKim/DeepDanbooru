@@ -2,8 +2,10 @@ import sys
 from typing_extensions import Required
 
 import click
-
+import warnings
+import os
 import deepdanbooru as dd
+import tensorflow.lite as tflite
 
 __version__ = "1.0.0"
 
@@ -188,6 +190,9 @@ def evaluate(
     folder_filters,
     verbose,
 ):
+    if verbose:
+        warnings.filterwarnings("always")
+        os.environ['TF_CPP_MIN_LOG_LEVEL'] = '0'
     dd.commands.evaluate(
         target_paths,
         project_path,
@@ -200,6 +205,34 @@ def evaluate(
         folder_filters,
         verbose,
     )
+
+@main.command("conv2tflite", help="Convert saved model into tflite model.")
+@click.option(
+    "--project-path",
+    type=click.Path(exists=True, resolve_path=True, file_okay=False, dir_okay=True),
+    help="Project path. If you want to use specific model and tags, use --model-path and --tags-path options.",
+)
+@click.option(
+    "--model-path",
+    type=click.Path(exists=True, resolve_path=True, file_okay=True, dir_okay=False),
+)
+@click.option(
+    "--save-path",
+    type=click.Path(resolve_path=True, file_okay=True, dir_okay=False),
+)
+@click.option("--optimize-default", default=True, is_flag=True)
+@click.option("--optimize-experimental-sparsity", default=False, is_flag=True)
+@click.option("--verbose", default=False, is_flag=True)
+def conv2tflite(project_path, model_path, save_path, optimize_default, optimize_experimental_sparsity, verbose):
+    if verbose:
+        warnings.filterwarnings("always")
+        os.environ['TF_CPP_MIN_LOG_LEVEL'] = '0'
+    if not optimize_default and not optimize_experimental_sparsity:
+        raise Exception("optimization method must be specified")
+    op = []
+    if optimize_default: op = [tflite.Optimize.DEFAULT]
+    if optimize_experimental_sparsity: op.append(tflite.Optimize.EXPERIMENTAL_SPARSITY)
+    dd.commands.convert_to_tflite_from_from_saved_model(project_path, model_path, save_path, op, verbose=verbose)
 
 
 if __name__ == "__main__":
