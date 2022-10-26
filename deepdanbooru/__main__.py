@@ -173,13 +173,19 @@ def grad_cam(project_path, target_path, output_path, threshold):
     help="If this option is enabled, TARGET_PATHS can be folder path and all images (using --folder-filters) in that folder is estimated recursively. If there are file and folder which has same name, the file is skipped and only folder is used.",
 )
 @click.option(
+    "--save-txt",
+    default=False,
+    is_flag=True,
+    help="Enable this option to save tags to a txt file with the same filename.",
+)
+@click.option(
     "--folder-filters",
     default="*.[Pp][Nn][Gg],*.[Jj][Pp][Gg],*.[Jj][Pp][Ee][Gg],*.[Gg][Ii][Ff]",
     help="Glob pattern for searching image files in folder. You can specify multiple patterns by separating comma. This is used when --allow-folder is enabled. Default:*.[Pp][Nn][Gg],*.[Jj][Pp][Gg],*.[Jj][Pp][Ee][Gg],*.[Gg][Ii][Ff]",
 )
 @click.option("--verbose", default=False, is_flag=True)
 def evaluate(
-    target_paths,
+    target_paths, # I guess its this one
     project_path,
     model_path,
     tags_path,
@@ -187,6 +193,7 @@ def evaluate(
     allow_gpu,
     compile_model,
     allow_folder,
+    save_txt,
     folder_filters,
     verbose,
 ):
@@ -202,6 +209,7 @@ def evaluate(
         allow_gpu,
         compile_model,
         allow_folder,
+        save_txt,
         folder_filters,
         verbose,
     )
