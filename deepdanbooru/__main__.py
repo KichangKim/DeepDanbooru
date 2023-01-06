@@ -194,6 +194,7 @@ def evaluate(
     compile_model,
     allow_folder,
     save_txt,
+    save_json,
     folder_filters,
     verbose,
 ):
@@ -210,6 +211,7 @@ def evaluate(
         compile_model,
         allow_folder,
         save_txt,
+        save_json,
         folder_filters,
         verbose,
     )

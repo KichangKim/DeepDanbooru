@@ -1,3 +1,4 @@
+import json
 import os
 from typing import Any, Iterable, List, Tuple, Union
 
@@ -17,6 +18,12 @@ def save_txt_file(txt_path, list):
             else:
                 writer.write(i + ", ")
     print("Saved text file.")
+
+def save_json_file(json_path, score_dict):
+    with open(json_path, 'w') as writer:
+        json.dump(score_dict, writer)
+        writer.close()
+    print("Saved json file.")
 
 def evaluate_image(
     image_input: Union[str, six.BytesIO], model: Any, tags: List[str], threshold: float
@@ -50,6 +57,7 @@ def evaluate(
     compile_model,
     allow_folder,
     save_txt,
+    save_json,
     folder_filters,
     verbose,
 ):
@@ -96,11 +104,20 @@ def evaluate(
 
     for image_path in target_image_paths:
         print(f"Tags of {image_path}:") #yup!
-        if save_txt: tag_list = []
+        if save_txt:
+            tag_list = []
+        if save_json:
+            tag_dict = {}
         for tag, score in evaluate_image(image_path, model, tags, threshold):
             print(f"({score:05.3f}) {tag}")
-            if save_txt: tag_list.append(tag)
+            if save_txt:
+                tag_list.append(tag)
+            if save_json:
+                tag_dict[tag] = score
         if save_txt:
             txt_file_path = str(os.path.splitext(image_path)[0]) + ".txt"
             save_txt_file(txt_file_path, tag_list)
+        if save_json:
+            json_file_path = str(os.path.splitext(image_path)[0]) + ".json"
+            save_json_file(json_file_path, tag_dict)
         print()
