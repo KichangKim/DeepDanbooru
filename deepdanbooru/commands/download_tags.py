@@ -34,6 +34,7 @@ def download_category_tags(
     }
 
     request_url = "https://danbooru.donmai.us/tags.json"
+    headers={'User-Agent': 'Mozilla/5.0'}
 
     tags = set()
 
@@ -41,6 +42,7 @@ def download_category_tags(
         response = requests.get(
             request_url,
             params=parameters,
+            headers=headers,
         )
         response_json = response.json()
 
