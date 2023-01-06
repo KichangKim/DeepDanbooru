@@ -40,7 +40,7 @@ To install it with tensorflow, add `tensorflow` extra package.
 ```
 3. Prepare tag list. If you want to use latest tags, use following command. It downloads tag from Danbooru server. (Need Danbooru account and API key)
 ```
-> deepdanbooru download-tags [your_project_folder] --login [your_danbooru_account] --api-key [your_danbooru_api_key]
+> deepdanbooru download-tags [your_project_folder] --username [your_danbooru_account] --api-key [your_danbooru_api_key]
 ```
 4. (Option) Filtering dataset. If you want to train with optional tags (rating and score), you should convert it as system tags.
 ```
