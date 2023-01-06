@@ -2,6 +2,7 @@ import os
 import time
 
 import requests
+import cloudscraper
 
 import deepdanbooru as dd
 
@@ -37,9 +38,10 @@ def download_category_tags(
     headers={'User-Agent': 'Mozilla/5.0'}
 
     tags = set()
+    scraper = cloudscraper.create_scraper()
 
     while True:
-        response = requests.get(
+        response = scraper.get(
             request_url,
             params=parameters,
             headers=headers,
