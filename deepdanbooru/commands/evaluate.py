@@ -58,6 +58,7 @@ def evaluate(
     allow_folder,
     save_txt,
     save_json,
+    save_path,
     folder_filters,
     verbose,
 ):
@@ -104,6 +105,10 @@ def evaluate(
 
     for image_path in target_image_paths:
         print(f"Tags of {image_path}:") #yup!
+        if save_path:
+            file_path = str(os.path.join(save_path, str(os.path.basename(image_path).split(".")[0])))
+        else:
+            file_path = str(os.path.splitext(image_path)[0])
         if save_txt:
             tag_list = []
         if save_json:
@@ -115,9 +120,9 @@ def evaluate(
             if save_json:
                 tag_dict[tag] = str(score)
         if save_txt:
-            txt_file_path = str(os.path.splitext(image_path)[0]) + ".txt"
+            txt_file_path = file_path + ".txt"
             save_txt_file(txt_file_path, tag_list)
         if save_json:
-            json_file_path = str(os.path.splitext(image_path)[0]) + ".json"
+            json_file_path = file_path + ".json"
             save_json_file(json_file_path, tag_dict)
         print()
