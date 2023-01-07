@@ -194,6 +194,12 @@ def grad_cam(project_path, target_path, output_path, threshold):
     default="*.[Pp][Nn][Gg],*.[Jj][Pp][Gg],*.[Jj][Pp][Ee][Gg],*.[Gg][Ii][Ff]",
     help="Glob pattern for searching image files in folder. You can specify multiple patterns by separating comma. This is used when --allow-folder is enabled. Default:*.[Pp][Nn][Gg],*.[Jj][Pp][Gg],*.[Jj][Pp][Ee][Gg],*.[Gg][Ii][Ff]",
 )
+@click.option(
+    "--no-tag-output",
+    default=False,
+    is_flag=True,
+    help="Do not print tags to stdout",
+)
 @click.option("--verbose", default=False, is_flag=True)
 def evaluate(
     target_paths, # I guess its this one
@@ -208,6 +214,7 @@ def evaluate(
     save_json,
     save_path,
     folder_filters,
+    no_tag_output,
     verbose,
 ):
     if verbose:
@@ -226,6 +233,7 @@ def evaluate(
         save_json,
         save_path,
         folder_filters,
+        no_tag_output,
         verbose,
     )
 

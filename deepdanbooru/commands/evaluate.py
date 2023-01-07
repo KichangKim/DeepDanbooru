@@ -60,6 +60,7 @@ def evaluate(
     save_json,
     save_path,
     folder_filters,
+    no_tag_output,
     verbose,
 ):
     if not allow_gpu:
@@ -104,7 +105,8 @@ def evaluate(
         tags = dd.project.load_tags_from_project(project_path)
 
     for image_path in target_image_paths:
-        print(f"Tags of {image_path}:") #yup!
+        if no_tag_output is False:
+            print(f"Tags of {image_path}:") #yup!
         if save_path:
             dd.io.try_create_directory(save_path)
             file_path = str(os.path.join(save_path, str(os.path.basename(image_path).split(".")[0])))
@@ -115,7 +117,8 @@ def evaluate(
         if save_json:
             tag_dict = {}
         for tag, score in evaluate_image(image_path, model, tags, threshold):
-            print(f"({score:05.3f}) {tag}")
+            if no_tag_output is False:
+                print(f"({score:05.3f}) {tag}")
             if save_txt:
                 tag_list.append(tag)
             if save_json:
@@ -126,4 +129,5 @@ def evaluate(
         if save_json:
             json_file_path = file_path + ".json"
             save_json_file(json_file_path, tag_dict)
-        print()
+        if no_tag_output is False:
+            print()
