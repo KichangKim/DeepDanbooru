@@ -179,6 +179,12 @@ def grad_cam(project_path, target_path, output_path, threshold):
     help="Enable this option to save tags to a txt file with the same filename.",
 )
 @click.option(
+    "--save-json",
+    default=False,
+    is_flag=True,
+    help="Enable this option to save tags to score as a json file with the same filename.",
+)
+@click.option(
     "--folder-filters",
     default="*.[Pp][Nn][Gg],*.[Jj][Pp][Gg],*.[Jj][Pp][Ee][Gg],*.[Gg][Ii][Ff]",
     help="Glob pattern for searching image files in folder. You can specify multiple patterns by separating comma. This is used when --allow-folder is enabled. Default:*.[Pp][Nn][Gg],*.[Jj][Pp][Gg],*.[Jj][Pp][Ee][Gg],*.[Gg][Ii][Ff]",
