@@ -186,8 +186,7 @@ def grad_cam(project_path, target_path, output_path, threshold):
 )
 @click.option(
     "--save-path",
-    default=False,
-    is_flag=True,
+    type=click.Path(exists=True, resolve_path=True, file_okay=False, dir_okay=True),
     help="Directory path to save result files to.",
 )
 @click.option(
