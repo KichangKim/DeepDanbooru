@@ -106,6 +106,7 @@ def evaluate(
     for image_path in target_image_paths:
         print(f"Tags of {image_path}:") #yup!
         if save_path:
+            dd.io.try_create_directory(save_path)
             file_path = str(os.path.join(save_path, str(os.path.basename(image_path).split(".")[0])))
         else:
             file_path = str(os.path.splitext(image_path)[0])
