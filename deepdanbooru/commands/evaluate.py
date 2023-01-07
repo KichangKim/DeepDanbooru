@@ -113,7 +113,7 @@ def evaluate(
             if save_txt:
                 tag_list.append(tag)
             if save_json:
-                tag_dict[tag] = "{score:05.3f}"
+                tag_dict[tag] = str("{score:05.3f}")
         if save_txt:
             txt_file_path = str(os.path.splitext(image_path)[0]) + ".txt"
             save_txt_file(txt_file_path, tag_list)
