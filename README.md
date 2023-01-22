@@ -57,7 +57,7 @@ To install it with tensorflow, add `tensorflow` extra package.
 ```
 
 ## Dataset Structure
-DeepDanbooru uses following folder structure for input dataset. SQLite file can be any name, but must be located in same folder to `images` folder.
+DeepDanbooru uses following folder structure for input dataset. SQLite file can be any name, but must be located in same folder to `images` folder. All of image files are located in sub-folder which named first 2 characters of its filename.
 ```
 MyDataset/
 ├── images/
@@ -65,8 +65,10 @@ MyDataset/
 │   │   ├── 00000000000000000000000000000000.jpg
 │   │   ├── ...
 │   ├── 01/
+│   │   ├── 01000000000000000000000000000000.jpg
 │   │   ├── ...
 │   └── ff/
+│       ├── ff000000000000000000000000000000.jpg
 │       ├── ...
 └── my-dataset.sqlite
 ```
