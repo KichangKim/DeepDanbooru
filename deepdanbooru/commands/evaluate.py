@@ -1,3 +1,4 @@
+import json
 import os
 from typing import Any, Iterable, List, Tuple, Union
 
@@ -6,7 +7,7 @@ import tensorflow as tf
 
 import deepdanbooru as dd
 
-def save_txt_file(txt_path, list):
+def save_txt_file(txt_path, list, log_disable):
     last_index = len(list)-1
     last_tag = list[last_index]
     with open(txt_path, 'w') as writer:
@@ -16,7 +17,15 @@ def save_txt_file(txt_path, list):
                 writer.close()
             else:
                 writer.write(i + ", ")
-    print("Saved text file.")
+    if log_disable is False:
+        print("Saved text file.")
+
+def save_json_file(json_path, score_dict, log_disable):
+    with open(json_path, 'w') as writer:
+        json.dump(score_dict, writer)
+        writer.close()
+    if log_disable is False:
+        print("Saved json file.")
 
 def evaluate_image(
     image_input: Union[str, six.BytesIO], model: Any, tags: List[str], threshold: float
@@ -50,7 +59,10 @@ def evaluate(
     compile_model,
     allow_folder,
     save_txt,
+    save_json,
+    save_path,
     folder_filters,
+    no_tag_output,
     verbose,
 ):
     if not allow_gpu:
@@ -95,12 +107,31 @@ def evaluate(
         tags = dd.project.load_tags_from_project(project_path)
 
     for image_path in target_image_paths:
-        print(f"Tags of {image_path}:") #yup!
-        if save_txt: tag_list = []
-        for tag, score in evaluate_image(image_path, model, tags, threshold):
-            print(f"({score:05.3f}) {tag}")
-            if save_txt: tag_list.append(tag)
+        if no_tag_output is False:
+            print(f"Tags of {image_path}:") #yup!
+        else:
+            print(f"Tagging {image_path}...")
+        if save_path:
+            dd.io.try_create_directory(save_path)
+            file_path = str(os.path.join(save_path, str(os.path.basename(image_path).split(".")[0])))
+        else:
+            file_path = str(os.path.splitext(image_path)[0])
         if save_txt:
-            txt_file_path = str(os.path.splitext(image_path)[0]) + ".txt"
-            save_txt_file(txt_file_path, tag_list)
-        print()
+            tag_list = []
+        if save_json:
+            tag_dict = {}
+        for tag, score in evaluate_image(image_path, model, tags, threshold):
+            if no_tag_output is False:
+                print(f"({score:05.3f}) {tag}")
+            if save_txt:
+                tag_list.append(tag)
+            if save_json:
+                tag_dict[tag] = str(score)
+        if save_txt:
+            txt_file_path = file_path + ".txt"
+            save_txt_file(txt_file_path, tag_list, no_tag_output)
+        if save_json:
+            json_file_path = file_path + ".json"
+            save_json_file(json_file_path, tag_dict, no_tag_output)
+        if no_tag_output is False:
+            print()
