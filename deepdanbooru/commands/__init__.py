@@ -6,4 +6,5 @@ from .evaluate import evaluate, evaluate_image
 from .grad_cam import grad_cam
 from .make_training_database import make_training_database
 from .train_project import train_project
+from .serve import serve
 
