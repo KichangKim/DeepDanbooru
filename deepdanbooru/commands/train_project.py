@@ -231,7 +231,7 @@ def train_project(project_path, source_model):
                 sample_count = x_train.shape[0]
 
                 step_result = model.train_on_batch(
-                    x_train, y_train, reset_metrics=False
+                    x_train, y_train
                 )
 
                 used_minibatch.assign_add(1)
