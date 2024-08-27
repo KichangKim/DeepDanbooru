@@ -26,15 +26,15 @@ class DatasetWrapper:
     def get_dataset(self, minibatch_size):
         dataset = tf.data.Dataset.from_tensor_slices(self.inputs)
         dataset = dataset.map(
-            self.map_load_image, num_parallel_calls=tf.data.experimental.AUTOTUNE
+            self.map_load_image, num_parallel_calls=tf.data.AUTOTUNE
         )
-        dataset = dataset.apply(tf.data.experimental.ignore_errors())
+        dataset = dataset.ignore_errors()
         dataset = dataset.map(
             self.map_transform_image_and_label,
-            num_parallel_calls=tf.data.experimental.AUTOTUNE,
+            num_parallel_calls=tf.data.AUTOTUNE,
         )
         dataset = dataset.batch(minibatch_size)
-        dataset = dataset.prefetch(buffer_size=tf.data.experimental.AUTOTUNE)
+        dataset = dataset.prefetch(buffer_size=tf.data.AUTOTUNE)
         # dataset = dataset.apply(
         #    tf.data.experimental.prefetch_to_device('/device:GPU:0'))
 

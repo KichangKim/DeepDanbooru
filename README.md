@@ -1,19 +1,19 @@
 # DeepDanbooru
-[![Python](https://img.shields.io/badge/python-3.6-green)](https://www.python.org/doc/versions/)
+[![Python](https://img.shields.io/badge/python-3.11-green)](https://www.python.org/doc/versions/)
 [![GitHub](https://img.shields.io/github/license/KichangKim/DeepDanbooru)](https://opensource.org/licenses/MIT)
 [![Web](https://img.shields.io/badge/web%20demo-20200915-brightgreen)](http://kanotype.iptime.org:8003/deepdanbooru/)
 
 **DeepDanbooru** is anime-style girl image tag estimation system. You can estimate your images on my live demo site, [DeepDanbooru Web](http://dev.kanotype.net:8003/deepdanbooru/).
 
 ## Requirements
-DeepDanbooru is written by Python 3.7. Following packages are need to be installed.
-- tensorflow>=2.7.0
-- tensorflow-io>=2.22.0
-- Click>=7.0
-- numpy>=1.16.2
-- requests>=2.22.0
-- scikit-image>=0.15.0
-- six>=1.13.0
+DeepDanbooru is written by Python 3.11. Following packages are need to be installed.
+- Click>=8.1.7
+- numpy>=1.26.4
+- requests>=2.32.3
+- scikit-image>=0.24.0
+- six>=1.16.0
+- tensorflow>=2.17.0
+- tensorflow-io>=0.31.0
 
 Or just use `requirements.txt`.
 ```

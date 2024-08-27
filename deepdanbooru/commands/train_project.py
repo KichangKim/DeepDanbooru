@@ -206,7 +206,7 @@ def train_project(project_path, source_model):
                     learning_rate = learning_rate_per_epoch["learning_rate"]
         print(f"Trying to change learning rate to {learning_rate} ...")
         optimizer.learning_rate.assign(learning_rate)
-        print(f"Learning rate is changed to {optimizer.learning_rate} ...")
+        tf.print(f"Learning rate is changed to", optimizer.learning_rate, "...")
 
         while int(offset) < epoch_size:
             image_records_slice = image_records[
@@ -292,17 +292,17 @@ def train_project(project_path, source_model):
         if export_model_per_epoch == 0 or int(used_epoch) % export_model_per_epoch == 0:
             print(f"Saving model ... (per epoch {export_model_per_epoch})")
             export_path = os.path.join(
-                project_path, f"model-{model_type}.h5.e{int(used_epoch)}"
+                project_path, f"model-{model_type}.e{int(used_epoch)}.keras"
             )
-            model.save(export_path, include_optimizer=False, save_format="h5")
+            model.save(export_path, include_optimizer=False)
 
             if use_mixed_precision:
                 export_model_as_float32(
-                    model_float32, checkpoint_path, export_path + ".float32.h5"
+                    model_float32, checkpoint_path, export_path + ".float32.keras"
                 )
 
     print("Saving model ...")
-    model_path = os.path.join(project_path, f"model-{model_type}.h5")
+    model_path = os.path.join(project_path, f"model-{model_type}.keras")
 
     # tf.keras.experimental.export_saved_model throw exception now
     # see https://github.com/tensorflow/tensorflow/issues/27112
@@ -310,7 +310,7 @@ def train_project(project_path, source_model):
 
     if use_mixed_precision:
         export_model_as_float32(
-            model_float32, checkpoint_path, model_path + ".float32.h5"
+            model_float32, checkpoint_path, model_path + ".float32.keras"
         )
 
     print("Training is complete.")
