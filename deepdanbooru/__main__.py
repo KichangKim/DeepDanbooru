@@ -242,6 +242,34 @@ def conv2tflite(project_path, model_path, save_path, optimize_default, optimize_
     if optimize_experimental_sparsity: op.append(tflite.Optimize.EXPERIMENTAL_SPARSITY)
     dd.commands.convert_to_tflite_from_from_saved_model(project_path, model_path, save_path, op, verbose=verbose)
 
+@main.command("serve", help="Host project as a web service.")
+@click.option(
+    "--project-path",
+    type=click.Path(exists=True, resolve_path=True, file_okay=False, dir_okay=True),
+    help="Project path. If you want to use specific model and tags, use --model-path and --tags-path options.",
+)
+@click.option(
+    "--model-path",
+    type=click.Path(exists=True, resolve_path=True, file_okay=True, dir_okay=False),
+)
+@click.option(
+    "--tags-path",
+    type=click.Path(exists=True, resolve_path=True, file_okay=True, dir_okay=False),
+)
+@click.option(
+    "--host",
+    default="localhost",
+    help="Provide host for the web service.",
+)
+@click.option(
+    "--port",
+    default=9001,
+    help="Provide port for the web service.",
+)
+@click.option("--allow-gpu", default=False, is_flag=True)
+@click.option("--verbose", default=False, is_flag=True)
+def serve(project_path, model_path, tags_path, host, port, allow_gpu, verbose):
+    dd.commands.serve(project_path, model_path, tags_path, host, port, allow_gpu, verbose)
 
 if __name__ == "__main__":
     main()
