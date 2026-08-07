@@ -95,7 +95,11 @@ def evaluate(
         tags = dd.project.load_tags_from_project(project_path)
 
     for image_path in target_image_paths:
-        print(f"Tags of {image_path}:") #yup!
+        try:
+            print(f"Tags of {image_path}") #yup!
+        except UnicodeEncodeError:
+            print(f"Tags of {image_path.encode('ascii', errors='replace').decode('ascii')}:")
+            
         if save_txt: tag_list = []
         for tag, score in evaluate_image(image_path, model, tags, threshold):
             print(f"({score:05.3f}) {tag}")
